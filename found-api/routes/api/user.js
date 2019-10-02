@@ -52,14 +52,42 @@ router.post('/register', (req, res) => {
                                 return res.json(user)
                             })
                             .catch(err => {
-                                console.log(err);
+                                return res.json(err)
                             });
                     });
                 });
             }
         })
         .catch(err => {
-            console.log(err);
+            return res.json(err)
+        });
+});
+
+router.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({
+            email: email
+        })
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({
+                    email: '用户不存在'
+                });
+            }
+
+            bcrypt.compare(password, user.password)
+                .then(isMatch => {
+                    if (isMatch) {
+                        return res.json({
+                            msg: 'success'
+                        });
+                    } else {
+                        return res.status(400).json({
+                            password: '密码错误'
+                        });
+                    }
+                });
         });
 });
 
