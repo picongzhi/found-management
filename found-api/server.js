@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 const uri = require('./config/keys').mongoURI;
+
 const user = require('./routes/api/user');
+const profile = require('./routes/api/profile');
 
 // express
 const app = express();
@@ -18,6 +20,7 @@ require('./config/passport')(passport);
 
 
 app.use('/api/user', user);
+app.use('/api/profile', profile);
 
 // mongodb
 mongoose.connect(uri, {
