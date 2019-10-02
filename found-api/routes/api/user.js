@@ -1,8 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
+const jwt = require('jsonwebtoken');
 
 const User = require('../../models/user');
+const secret = require('../../config/keys').secretOrKey;
 
 const router = express.Router();
 
@@ -79,8 +81,22 @@ router.post('/login', (req, res) => {
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
                     if (isMatch) {
-                        return res.json({
-                            msg: 'success'
+                        const rule = {
+                            id: user.id,
+                            name: user.name
+                        }
+
+                        jwt.sign(rule, secret, {
+                            expiresIn: 3600
+                        }, (err, token) => {
+                            if (err) {
+                                throw err;
+                            }
+
+                            return res.json({
+                                success: true,
+                                token: 'pcz ' + token
+                            });
                         });
                     } else {
                         return res.status(400).json({
@@ -89,6 +105,12 @@ router.post('/login', (req, res) => {
                     }
                 });
         });
+});
+
+router.get('/current', (req, res) => {
+    return res.json({
+        msg: 'success'
+    });
 });
 
 module.exports = router;
