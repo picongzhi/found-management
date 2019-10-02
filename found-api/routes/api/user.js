@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 const User = require('../../models/user');
 const secret = require('../../config/keys').secretOrKey;
@@ -95,7 +96,7 @@ router.post('/login', (req, res) => {
 
                             return res.json({
                                 success: true,
-                                token: 'pcz ' + token
+                                token: 'Bearer ' + token
                             });
                         });
                     } else {
@@ -107,9 +108,13 @@ router.post('/login', (req, res) => {
         });
 });
 
-router.get('/current', (req, res) => {
+router.get('/current', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
     return res.json({
-        msg: 'success'
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email
     });
 });
 
