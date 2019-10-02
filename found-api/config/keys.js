@@ -1,3 +1,3 @@
 module.exports = {
-    mongoURI: 'mongodb://picongzhi:pcz930301@localhost:27017/foundation'
+    mongoURI: 'mongodb://admin:admin@localhost:27017/foundation?authSource=admin'
 }
