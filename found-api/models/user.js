@@ -15,7 +15,10 @@ const UserSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        required: false
+    },
+    identity: {
+        type: String,
+        required: true
     },
     date: {
         type: Date,

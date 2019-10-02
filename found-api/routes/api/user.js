@@ -9,21 +9,13 @@ const secret = require('../../config/keys').secretOrKey;
 
 const router = express.Router();
 
-router.get('/test', (req, res) => {
-    res.json({
-        msg: 'login works'
-    });
-});
-
 router.post('/register', (req, res) => {
     User.findOne({
             email: req.body.email
         })
         .then(user => {
             if (user) {
-                return res.status(400).json({
-                    email: '邮箱已被注册'
-                });
+                return res.status(400).json('邮箱已被注册');
             } else {
                 const avatar = gravatar.url(req.body.email, {
                     protocol: 'http',
@@ -32,16 +24,13 @@ router.post('/register', (req, res) => {
                     d: 'mm'
                 });
 
-                console.log(avatar);
-
                 const newUser = new User({
                     name: req.body.name,
                     email: req.body.email,
                     avatar: avatar,
-                    password: req.body.password
+                    password: req.body.password,
+                    identity: req.body.identity
                 });
-
-                console.log(newUser);
 
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -74,9 +63,7 @@ router.post('/login', (req, res) => {
         })
         .then(user => {
             if (!user) {
-                return res.status(404).json({
-                    email: '用户不存在'
-                });
+                return res.status(404).json('用户不存在');
             }
 
             bcrypt.compare(password, user.password)
@@ -84,8 +71,10 @@ router.post('/login', (req, res) => {
                     if (isMatch) {
                         const rule = {
                             id: user.id,
-                            name: user.name
-                        }
+                            name: user.name,
+                            avatar: user.avatar,
+                            identity: user.identity
+                        };
 
                         jwt.sign(rule, secret, {
                             expiresIn: 3600
@@ -100,9 +89,7 @@ router.post('/login', (req, res) => {
                             });
                         });
                     } else {
-                        return res.status(400).json({
-                            password: '密码错误'
-                        });
+                        return res.status(400).json('密码错误');
                     }
                 });
         });
@@ -114,7 +101,8 @@ router.get('/current', passport.authenticate('jwt', {
     return res.json({
         id: req.user.id,
         name: req.user.name,
-        email: req.user.email
+        email: req.user.email,
+        identity: req.user.identity
     });
 });
 
