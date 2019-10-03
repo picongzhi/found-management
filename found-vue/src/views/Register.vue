@@ -29,7 +29,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit-btn" @click="sunmitForm('registerForm')">注册</el-button>
+            <el-button type="primary" class="submit-btn" @click="submitForm('registerForm')">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -42,6 +42,14 @@ export default {
   name: "Register",
   components: {},
   data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value !== this.registerUser.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+
     return {
       registerUser: {
         name: "",
@@ -49,8 +57,73 @@ export default {
         password: "",
         password2: "",
         identity: ""
+      },
+      rules: {
+        name: [
+          {
+            required: true,
+            message: "用户名不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            max: 30,
+            message: "长度在2到30个字符之间",
+            trigger: "blur"
+          }
+        ],
+        email: [
+          {
+            type: "email",
+            required: true,
+            message: "邮箱格式不正确",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "密码不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在6到30个字符之间",
+            trigger: "blur"
+          }
+        ],
+        password2: [
+          {
+            required: true,
+            message: "确认密码不能为空",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在6到30个字符之间",
+            trigger: "blur"
+          },
+          {
+            validator: validatePass2,
+            trigger: "blur"
+          }
+        ]
       }
     };
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log("submit");
+        } else {
+          console.log("error");
+          return false;
+        }
+      });
+    }
   }
 };
 </script>
