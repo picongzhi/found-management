@@ -117,11 +117,17 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log("submit");
-        } else {
-          console.log("error");
-          return false;
+          this.$axios
+            .post("/api/user/register", this.registerUser)
+            .then(res => {
+              this.$message({
+                message: "注册成功",
+                type: "success"
+              });
+            });
         }
+
+        this.$router.push("/login");
       });
     }
   }
