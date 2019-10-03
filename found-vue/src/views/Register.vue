@@ -3,6 +3,35 @@
     <section class="form-container">
       <div class="manage-tip">
         <span class="title">在线后台管理系统</span>
+        <el-form
+          :model="registerUser"
+          :rules="rules"
+          ref="registerForm"
+          label-width="80px"
+          class="register-form"
+        >
+          <el-form-item label="用户名" prop="name">
+            <el-input type="text" v-model="registerUser.name" placeholder="请输入用户名"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input type="text" v-model="registerUser.email" placeholder="请输入邮箱"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input type="password" v-model="registerUser.password" placeholder="请输入密码"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="password2">
+            <el-input type="password" v-model="registerUser.password2" placeholder="请确认密码"></el-input>
+          </el-form-item>
+          <el-form-item label="选择身份" prop="identity">
+            <el-select v-model="registerUser.identity" placeholder="请选择身份">
+              <el-option label="管理员" value="manager"></el-option>
+              <el-option label="员工" value="employee"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="submit-btn" @click="sunmitForm('registerForm')">注册</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </section>
   </div>
@@ -11,7 +40,18 @@
 <script>
 export default {
   name: "Register",
-  components: {}
+  components: {},
+  data() {
+    return {
+      registerUser: {
+        name: "",
+        email: "",
+        password: "",
+        password2: "",
+        identity: ""
+      }
+    };
+  }
 };
 </script>
 
@@ -42,7 +82,7 @@ export default {
   color: #fff;
 }
 
-.registerForm {
+.register-form {
   margin-top: 20px;
   background-color: #fff;
   padding: 20px 40px 20px 20px;
