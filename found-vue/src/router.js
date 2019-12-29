@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from './views/Index'
-import Register from './views/Register'
-import NotFound from './views/404.vue'
+import Index from '@/views/Index'
+import Register from '@/views/Register'
+import NotFound from '@/views/404.vue'
 
 Vue.use(Router)
 
@@ -22,7 +22,7 @@ export default new Router({
     component: Register
   }, {
     path: '*',
-    name: '/404',
+    name: '404',
     component: NotFound
   }]
 })

@@ -11,16 +11,32 @@
           class="register-form"
         >
           <el-form-item label="用户名" prop="name">
-            <el-input type="text" v-model="registerUser.name" placeholder="请输入用户名"></el-input>
+            <el-input
+              type="text"
+              v-model="registerUser.name"
+              placeholder="请输入用户名"
+            ></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input type="text" v-model="registerUser.email" placeholder="请输入邮箱"></el-input>
+            <el-input
+              type="text"
+              v-model="registerUser.email"
+              placeholder="请输入邮箱"
+            ></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="registerUser.password" placeholder="请输入密码"></el-input>
+            <el-input
+              type="password"
+              v-model="registerUser.password"
+              placeholder="请输入密码"
+            ></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="password2">
-            <el-input type="password" v-model="registerUser.password2" placeholder="请确认密码"></el-input>
+            <el-input
+              type="password"
+              v-model="registerUser.password2"
+              placeholder="请确认密码"
+            ></el-input>
           </el-form-item>
           <el-form-item label="选择身份" prop="identity">
             <el-select v-model="registerUser.identity" placeholder="请选择身份">
@@ -29,7 +45,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit-btn" @click="submitForm('registerForm')">注册</el-button>
+            <el-button
+              type="primary"
+              class="submit-btn"
+              @click="submitForm('registerForm')"
+              >注册</el-button
+            >
           </el-form-item>
         </el-form>
       </div>
