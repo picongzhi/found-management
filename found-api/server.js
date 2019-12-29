@@ -8,31 +8,30 @@ const uri = require('./config/keys').mongoURI;
 const user = require('./routes/api/user');
 const profile = require('./routes/api/profile');
 
+// mongodb
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('MongoDB connected!');
+}).catch(err => {
+    console.log(err);
+});
+
 // express
 const app = express();
+
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
 
+// passport init
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
-
 app.use('/api/user', user);
 app.use('/api/profile', profile);
-
-// mongodb
-mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => {
-        console.log('MongoDB connected!');
-    })
-    .catch(err => {
-        console.log(err);
-    });
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

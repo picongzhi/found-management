@@ -11,7 +11,7 @@ const ProfileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    expand: {
+    expense: {
         type: String,
         required: true
     },
