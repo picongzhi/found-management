@@ -73,10 +73,10 @@ export default {
           this.$axios.post("/api/user/login", this.loginUser).then(res => {
             const { token } = res.data;
             localStorage.setItem("token", token);
+
+            this.$router.push("/index");
           });
         }
-
-        this.$router.push("/index");
       });
     }
   }

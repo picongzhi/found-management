@@ -124,10 +124,10 @@ export default {
                 message: "注册成功",
                 type: "success"
               });
+
+              this.$router.push("/login");
             });
         }
-
-        this.$router.push("/login");
       });
     }
   }
