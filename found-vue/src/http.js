@@ -18,25 +18,23 @@ function endLoading() {
     loading.close();
 }
 
-axios.interceptors.request
-    .use(config => {
-        startLoading();
+axios.interceptors.request.use(config => {
+    startLoading();
 
-        return config;
-    }, err => {
-        return Promise.reject(err);
-    });
+    return config;
+}, err => {
+    return Promise.reject(err);
+});
 
-axios.interceptors.response
-    .use(response => {
-        endLoading();
+axios.interceptors.response.use(response => {
+    endLoading();
 
-        return response;
-    }, err => {
-        endLoading();
-        Message.error(err.response.data);
+    return response;
+}, err => {
+    endLoading();
+    Message.error(err.response.data);
 
-        return Promise.reject(err);
-    });
+    return Promise.reject(err);
+});
 
 export default axios;
