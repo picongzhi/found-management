@@ -12,7 +12,17 @@
             <p class="name comename">欢迎</p>
             <p class="name avatarname">{{ user.name }}</p>
           </div>
-          <span class="username"></span>
+          <span class="username">
+            <el-dropdown trigger="click" @command="handleCommand">
+              <span class="el-dropdown-link">
+                <i class="el-icon-caret-bottom el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="info">个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout">退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </span>
         </div>
       </el-col>
     </el-row>
@@ -25,6 +35,30 @@ export default {
   computed: {
     user() {
       return this.$store.getters.user
+    }
+  },
+  methods: {
+    handleCommand(command) {
+      if (!command) {
+        return
+      }
+
+      switch (command) {
+        case "info":
+          this.showUserInfo()
+          break
+        case "logout":
+          this.logout()
+          break
+      }
+    },
+    showUserInfo() {
+      console.log("show user info")
+    },
+    logout() {
+      localStorage.removeItem("token")
+      this.$store.dispatch("clearCurrentUser")
+      this.$router.push("/login")
     }
   }
 }
@@ -100,6 +134,10 @@ export default {
 
 .username {
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 10px;
+}
+
+.el-dropdown {
+  color: #fff;
 }
 </style>

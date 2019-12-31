@@ -1,6 +1,7 @@
 <template>
   <div class="index">
     <head-nav></head-nav>
+    <div>index</div>
   </div>
 </template>
 

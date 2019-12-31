@@ -21,9 +21,11 @@ export default {
   },
   created() {
     const token = localStorage.getItem("token")
-    const user = jwtDecode(token)
-    this.$store.dispatch("setAuthenticated", !this.isEmpty(user))
-    this.$store.dispatch("setUser", user)
+    if (token) {
+      const user = jwtDecode(token)
+      this.$store.dispatch("setAuthenticated", !this.isEmpty(user))
+      this.$store.dispatch("setUser", user)
+    }
   }
 }
 </script>
