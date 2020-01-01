@@ -10,7 +10,7 @@ import jwtDecode from "jwt-decode"
 export default {
   name: "App",
   methods: {
-    isEmpty(val) {
+    isEmpty (val) {
       return (
         val === undefined ||
         val === null ||
@@ -19,7 +19,7 @@ export default {
       )
     }
   },
-  created() {
+  created () {
     const token = localStorage.getItem("token")
     if (token) {
       const user = jwtDecode(token)

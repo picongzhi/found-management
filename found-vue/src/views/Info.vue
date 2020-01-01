@@ -14,7 +14,9 @@
           </div>
           <div class="user-item">
             <i class="fa fa-cog"></i>
-            <span>{{ user.identity === 'manager' ? '管理员' : '普通原因' }}</span>
+            <span>{{
+              user.identity === "manager" ? "管理员" : "普通原因"
+            }}</span>
           </div>
         </div>
       </el-col>
