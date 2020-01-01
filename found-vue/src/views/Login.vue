@@ -11,26 +11,13 @@
           class="login-form"
         >
           <el-form-item label="邮箱" prop="email">
-            <el-input
-              type="text"
-              v-model="loginUser.email"
-              placeholder="请输入邮箱"
-            ></el-input>
+            <el-input type="text" v-model="loginUser.email" placeholder="请输入邮箱"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input
-              type="password"
-              v-model="loginUser.password"
-              placeholder="请输入密码"
-            ></el-input>
+            <el-input type="password" v-model="loginUser.password" placeholder="请输入密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              class="submit-btn"
-              @click="submitForm('loginForm')"
-              >登录</el-button
-            >
+            <el-button type="primary" class="submit-btn" @click="submitForm('loginForm')">登录</el-button>
           </el-form-item>
           <div class="tip-area">
             <p>
@@ -50,7 +37,7 @@ import jwtDecode from "jwt-decode"
 export default {
   name: "Login",
   components: {},
-  data() {
+  data () {
     return {
       loginUser: {
         email: "",
@@ -63,8 +50,7 @@ export default {
             required: true,
             message: "邮箱格式不正确",
             trigger: "blur"
-          }
-        ],
+          }],
         password: [
           {
             required: true,
@@ -82,7 +68,7 @@ export default {
     }
   },
   methods: {
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios.post("/api/user/login", this.loginUser).then(res => {
@@ -98,7 +84,7 @@ export default {
         }
       })
     },
-    isEmpty(val) {
+    isEmpty (val) {
       return (
         val === undefined ||
         val === null ||
