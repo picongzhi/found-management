@@ -6,6 +6,7 @@ import Login from '@/views/Login'
 import NotFound from '@/views/404'
 import Home from '@/views/Home'
 import Info from '@/views/Info'
+import Fund from '@/views/Fund'
 
 Vue.use(Router)
 
@@ -30,6 +31,10 @@ const router = new Router({
       path: '/info',
       name: 'info',
       component: Info
+    }, {
+      path: '/fund',
+      name: 'fund',
+      component: Fund
     }]
   }, {
     path: '/register',

@@ -48,7 +48,7 @@ export default {
           path: 'fund',
           children: [
             {
-              path: 'foundList',
+              path: 'fund',
               name: '资金流水'
             }
           ]
