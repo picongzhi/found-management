@@ -97,22 +97,37 @@
       </el-table>
     </div>
 
-    <add-dialog :dialog="dialog" @refresh="getProfiles()"></add-dialog>
+    <profile-dialog
+      :dialog="dialog"
+      :profile="profile"
+      @refresh="getProfiles()"
+    ></profile-dialog>
   </div>
 </template>
 
 <script>
-import AddDialog from '@/components/AddDialog'
+import ProfileDialog from '@/components/ProfileDialog'
 
 export default {
   name: 'Fund',
-  components: { AddDialog },
+  components: { ProfileDialog },
   data () {
     return {
       profileList: [],
       dialog: {
-        show: false
-      }
+        show: false,
+        title: '',
+        type: 'add'
+      },
+      profile: {
+        id: '',
+        type: '',
+        desc: '',
+        income: 0,
+        expense: 0,
+        cash: 0,
+        remark: ''
+      },
     }
   },
   methods: {
@@ -126,14 +141,46 @@ export default {
         })
     },
     handleEdit (index, row) {
-      console.log('edit')
+      this.dialog = {
+        show: true,
+        title: '修改资金信息',
+        type: 'edit'
+      }
+      this.profile = {
+        id: row._id,
+        type: row.type,
+        desc: row.desc,
+        income: row.income,
+        expense: row.expense,
+        cash: row.cash,
+        remark: row.remark
+      }
     },
     handleDelete (index, row) {
-      console.log('delete')
+      this.$axios.delete(`/api/profile/delete/${row._id}`)
+        .then(res => {
+          this.$message('删除成功')
+          this.getProfiles()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     handleAdd () {
-      this.dialog.show = true;
-      console.log('add')
+      this.dialog = {
+        show: true,
+        title: '添加资金信息',
+        type: 'add'
+      }
+      this.profile = {
+        id: '',
+        type: '',
+        desc: '',
+        income: 0,
+        expense: 0,
+        cash: 0,
+        remark: ''
+      }
     }
   },
   mounted () {
