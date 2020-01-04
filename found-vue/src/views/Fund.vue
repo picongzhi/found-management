@@ -1,13 +1,35 @@
 <template>
   <div class="fund-container">
     <div>
-      <el-form :inline="true" ref="addProfile">
+      <el-form :inline="true" ref="addProfile" :model="searchForm">
+        <el-form-item label="按照时间筛选">
+          <el-date-picker
+            v-model="searchForm.startTime"
+            type="datetime"
+            placeholder="选择开始时间"
+          ></el-date-picker>
+          <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            placeholder="选择结束时间"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            size="small"
+            icon="search"
+            @click="handleSearch()"
+            >筛选</el-button
+          >
+        </el-form-item>
         <el-form-item class="add-btn">
           <el-button
             type="primary"
             size="small"
             icon="view"
             @click="handleAdd()"
+            v-if="user.identity === 'manager'"
             >添加</el-button
           >
         </el-form-item>
@@ -83,6 +105,7 @@
               size="small"
               icon="edit"
               @click="handleEdit(scope.$index, scope.row)"
+              v-if="user.identity === 'manager'"
               >编辑</el-button
             >
             <el-button
@@ -90,6 +113,7 @@
               size="small"
               icon="delete"
               @click="handleDelete(scope.$index, scope.row)"
+              v-if="user.identity === 'manager'"
               >删除</el-button
             >
           </template>
@@ -128,7 +152,12 @@ export default {
   components: { ProfileDialog },
   data () {
     return {
+      searchForm: {
+        startTime: '',
+        endTime: ''
+      },
       profileList: [],
+      filterProfileList: [],
       allProfileList: [],
       dialog: {
         show: false,
@@ -153,12 +182,17 @@ export default {
       }
     }
   },
+  computed: {
+    user () {
+      return this.$store.getters.user;
+    }
+  },
   methods: {
     getProfiles () {
       this.$axios.get('/api/profile')
         .then(res => {
           this.allProfileList = res.data
-          this.pagination.total = this.allProfileList.length
+          this.filterProfileList = res.data
           this.setPagination()
         })
         .catch(err => {
@@ -168,8 +202,7 @@ export default {
     setPagination () {
       const start = (this.pagination.currentPage - 1) * this.pagination.pageSize
       const end = start + this.pagination.pageSize
-      console.log(start)
-      console.log(end)
+      this.pagination.total = this.allProfileList.length
       this.profileList = this.allProfileList.filter((item, index) => {
         return index >= start && index < end
       })
@@ -222,6 +255,24 @@ export default {
     },
     handleCurrentChange (page) {
       this.pagination.currentPage = page
+      this.setPagination()
+    },
+    handleSearch () {
+      if (!this.searchForm.startTime || !this.searchForm.endTime) {
+        this.$message({
+          type: 'warning',
+          message: '请选择时间区间'
+        })
+        return
+      }
+
+      const start = this.searchForm.startTime.getTime()
+      const end = this.searchForm.endTime.getTime()
+      this.allProfileList = this.filterProfileList.filter(item => {
+        let time = new Date(item.date).getTime()
+        return time >= start && time <= end
+      })
+
       this.setPagination()
     }
   },
