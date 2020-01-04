@@ -95,6 +95,21 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-row>
+        <el-col :span="24">
+          <div class="pagination">
+            <el-pagination
+              :current-page.sync="pagination.currentPage"
+              :page-size="pagination.pageSize"
+              :page-sizes="pagination.sizes"
+              :layout="pagination.layout"
+              :total="pagination.total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            ></el-pagination>
+          </div>
+        </el-col>
+      </el-row>
     </div>
 
     <profile-dialog
@@ -114,6 +129,7 @@ export default {
   data () {
     return {
       profileList: [],
+      allProfileList: [],
       dialog: {
         show: false,
         title: '',
@@ -128,17 +144,35 @@ export default {
         cash: 0,
         remark: ''
       },
+      pagination: {
+        currentPage: 1,
+        pageSize: 5,
+        sizes: [5, 10, 15, 20],
+        total: 0,
+        layout: 'total, sizes, prev, pager, next, jumper'
+      }
     }
   },
   methods: {
     getProfiles () {
       this.$axios.get('/api/profile')
         .then(res => {
-          this.profileList = res.data
+          this.allProfileList = res.data
+          this.pagination.total = this.allProfileList.length
+          this.setPagination()
         })
         .catch(err => {
           console.log(err)
         })
+    },
+    setPagination () {
+      const start = (this.pagination.currentPage - 1) * this.pagination.pageSize
+      const end = start + this.pagination.pageSize
+      console.log(start)
+      console.log(end)
+      this.profileList = this.allProfileList.filter((item, index) => {
+        return index >= start && index < end
+      })
     },
     handleEdit (index, row) {
       this.dialog = {
@@ -181,6 +215,14 @@ export default {
         cash: 0,
         remark: ''
       }
+    },
+    handleSizeChange (size) {
+      this.pagination.pageSize = size
+      this.setPagination()
+    },
+    handleCurrentChange (page) {
+      this.pagination.currentPage = page
+      this.setPagination()
     }
   },
   mounted () {
@@ -199,5 +241,10 @@ export default {
 
 .add-btn {
   float: right;
+}
+
+.pagination {
+  text-align: right;
+  margin: 10px;
 }
 </style>
